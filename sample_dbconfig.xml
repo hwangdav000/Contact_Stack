@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dbconfig>
-  <host>cse-larry.cse.umn.edu</host>
-  <user>C4131S20U151</user>
-  <password>22831</password>
-  <database>C4131S20U151</database>
+  <host>us-cdbr-east-06.cleardb.net</host>
+  <user>bb272c5ed62d82</user>
+  <password>5b9a633e</password>
+  <database>heroku_1a22d43f8cdcb1d</database>
   <port>3306</port>
 </dbconfig>

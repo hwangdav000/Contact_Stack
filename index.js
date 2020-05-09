@@ -111,8 +111,8 @@ app.use(session({
 ));
 
 // server listens on port 9007 for incoming connections
-app.listen(9259, () => console.log('Listening on port 9259!'));
-
+//app.listen(9259, () => console.log('Listening on port 9259!'));
+app.listen(process.env.PORT||9001, ()=> console.log("Listening on port 9259!"));
 //  Get method for welcome page
 app.get('/',function(req, res) {
 	res.sendFile(__dirname + '/client/welcome.html');
