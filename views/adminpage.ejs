@@ -1,0 +1,348 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      .navbar {
+        background-color: #563d7c;
+      }
+      .navbar-default .navbar-nav li a{
+        color: #eee;
+      }
+      .navbar-default .navbar-nav li a:hover{
+        color: white;
+      }
+      th, td{
+        text-align: center;
+      }
+      thead {
+        background-color: #e57373;
+    color: white;
+      }
+
+       p {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 10px;
+          text-decoration: underline;
+          float: right;
+          font-weight: bold;
+      }
+
+    </style>
+  </head>
+
+
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav">
+              <li><a href="/"><b>Home</b></a></li>
+              <li><a href="/contact"><b>Contact</b></a></li>
+              <li><a href="/addContact"><b>Add Contact</b></a></li>
+              <li><a href="/stock"><b>Stock Page</b></a></li>
+              <li><a href="/admin"><b>Admin</b></a></li>
+              <li><a href="/logout">
+                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                  </a>
+              </li>
+
+          </ul>
+
+              <p id="userName"><%=username%></p>
+
+        </div>
+    </nav>
+    <br><br>
+
+      <div id = "sameLoginMessage" style = "visibility: hidden; text-align: center;">
+        <br/>
+        <b  style = "color: red; align="center" ">Error: This login is used by another user!</b>
+        <br/>
+      </div>
+
+      <div id = "deleteErrorMessage" style = "visibility: hidden; text-align: center;">
+        <br/>
+        <b  style = "color: red; align="center" ">Error: Cannot delete logged in user!</b>
+        <br/>
+      </div>
+
+
+
+      <div class="container">
+
+
+        <button type="button" id = "btnAdd" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-plus"></span> Add User
+        </button>
+
+        <br/>
+        <br/>
+
+        <table class="table table-striped table-bordered" id="tblData">
+
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Login</th>
+              <th scope="col">New Password</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <%for(var i = 0; i < response.length; i++) {%>
+              <tr>
+                <td> <%= response[i].acc_id %> </td>
+                <td> <%= response[i].acc_name %> </td>
+                <td> <%= response[i].acc_login %> </td>
+                <td></td>
+                <td>
+                  <span class='btnEdit glyphicon glyphicon-pencil'></span>&nbsp;&nbsp;&nbsp;<span class='btnDelete glyphicon glyphicon-trash'></span>"
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+
+        </table>
+
+		&copy; 2020 Harshit Jain, Ruofeng Liy, Yang He, and Dan Challou.
+		 Do not use, copy, redistribute this page or any portion of its contents, or remove this notice without the express written
+		 consent of the authors. Violation of this copyright is plagarism.
+
+      </div>
+
+    <script type="text/javascript">
+
+    // binds the add button to addFun
+    // calls fetchAllUsers to populate the list of all existing users
+    $(function() {
+      console.log("function()");
+      var x = "<%= test%>";
+      var y = "<%= mode%>";
+      //alert(x);
+      //alert(y);
+      document.getElementById("sameLoginMessage").style.visibility = "hidden";
+      document.getElementById("deleteErrorMessage").style.visibility = "hidden";
+
+      // modes
+      // mode 0 norm (do nothing)
+      // mode 1 add user
+      // mode 2 update user
+      // mode 3 delete user
+
+      if (x=="false" && y=="1"){
+        //alert("adding user mode");
+        document.getElementById("sameLoginMessage").style.visibility = "visible";
+      }
+      if (x=="false" && y=="2"){
+        //alert("updating user mode");
+        document.getElementById("sameLoginMessage").style.visibility = "visible";
+      }
+      if (x=="false" && y=="3"){
+        //alert("deleting user mode");
+        document.getElementById("deleteErrorMessage").style.visibility = "visible";
+      }
+
+
+
+      $("#btnAdd").bind("click", addFun);
+
+      fetchAllUsers();
+    });
+
+    // fetches the list of all users by hitting getUsers API of server
+    // dynamically appends the list of users to the table
+    function fetchAllUsers() {
+
+      function formTable() {
+        //users already fetched
+        $(".btnEdit").bind("click", editFun);
+        $(".btnDelete").bind("click", deleteFun);
+      }
+      formTable();
+    }
+
+    // function to add a new user
+    // this function internally calls saveFun() to save the details of the new user
+    function addFun() {
+      console.log("function addFun()");
+      $('#tblData tr:last').after(
+        "<tr>"+
+        "<td></td>"+
+        "<td><input type='text' /></td>"+
+        "<td><input type='text' /></td>"+
+        "<td><input type='text' /></td>"+
+        "<td><span class='btnSave glyphicon glyphicon-floppy-save'></span>&nbsp;&nbsp;&nbsp;<span class='btnCancel glyphicon glyphicon-remove'></span></td>"+
+        "</tr>"
+      );
+
+        $(".btnSave").bind("click", {mode: "Insert"}, saveFun);
+        $(".btnCancel").bind("click", cancelFun);
+    };
+
+    // this function can be called in two modes: 1. Insert 2. Update
+    // Insert mode: Add a new user by calling addUser API of server
+    // Update mode: Updates the details of an existing user by calling updateUser API of server
+    //
+    function saveFun(event) {
+      console.log("function saveFun()");
+      var parentVar = $(this).parent().parent();
+      var tdId = parentVar.children("td:nth-child(1)");
+      var tdName = parentVar.children("td:nth-child(2)");
+      var tdLogin = parentVar.children("td:nth-child(3)");
+      var tdPassword = parentVar.children("td:nth-child(4)");
+      var tdButtons = parentVar.children("td:nth-child(5)");
+
+      var modeOfUse = event.data.mode;
+      var oId = event.data.oId;
+
+      if(modeOfUse === "Insert") {
+        // call the API to add the details of a new user
+        $.post("addUser", {
+            name: tdName.children("input[type=text]").val(),
+            login: tdLogin.children("input[type=text]").val(),
+            password: tdPassword.children("input[type=text]").val()
+          }).done(function(data) {
+            /*
+            if(<%= test%> == true) {
+              // no other user exists with the login entered by user
+              var userId = data.id;
+              tdId.html(userId);
+              tdName.html(tdName.children("input[type=text]").val());
+              tdLogin.html(tdLogin.children("input[type=text]").val());
+              tdPassword.html(""); // have decided not to display the password
+              tdButtons.html("<span class='btnEdit glyphicon glyphicon-pencil'></span>&nbsp;&nbsp;&nbsp;<span class='btnDelete glyphicon glyphicon-trash'></span>");
+              document.getElementById("sameLoginMessage").style.visibility = "hidden";
+              document.getElementById("deleteErrorMessage").style.visibility = "hidden";
+
+              $(".btnEdit").bind("click", editFun);
+              $(".btnDelete").bind("click", deleteFun);
+
+            } else {
+              // some other user exists with the login entered by user
+              document.getElementById("sameLoginMessage").style.visibility = "visible";
+            }
+            */
+            window.location.reload();
+        });
+      } else {
+        // call the API to update the details of an existing user
+        $.post("updateUser", {
+            id: event.data.oldId,
+            name: tdName.children("input[type=text]").val(),
+            login: tdLogin.children("input[type=text]").val(),
+            password: tdPassword.children("input[type=text]").val()
+          }).done(function(data) {
+            /*
+            if(<%= test%> == true) {
+              // no other user exists with the login entered by user
+              tdId.html(tdId.children("input[type=text]").val());
+              tdName.html(tdName.children("input[type=text]").val());
+              tdLogin.html(tdLogin.children("input[type=text]").val());
+              tdPassword.html(""); // have decided not to display the password
+              tdButtons.html("<span class='btnEdit glyphicon glyphicon-pencil'>&nbsp;&nbsp;&nbsp;</span><span class='btnDelete glyphicon glyphicon-trash'></span>");
+              document.getElementById("sameLoginMessage").style.visibility = "hidden";
+              document.getElementById("deleteErrorMessage").style.visibility = "hidden";
+
+              $(".btnEdit").bind("click", editFun);
+              $(".btnDelete").bind("click", deleteFun);
+            } else {
+              // some other user exists with the login entered by user
+              document.getElementById("sameLoginMessage").style.visibility = "visible";
+            }
+            */
+            window.location.reload();
+        });
+      }
+    };
+
+    // function to exit the details of an existing user
+    // this function internally calls saveFun() to update the details of an existing user
+    function editFun() {
+      console.log("function editFun()");
+      var parentVar = $(this).parent().parent();
+      var tdId = parentVar.children("td:nth-child(1)");
+      var tdName = parentVar.children("td:nth-child(2)");
+      var tdLogin = parentVar.children("td:nth-child(3)");
+      var tdPassword = parentVar.children("td:nth-child(4)");
+      var tdButtons = parentVar.children("td:nth-child(5)");
+
+      var oId = tdId.html();
+      var oName = tdName.html();
+      var oLogin = tdLogin.html();
+
+      tdId.html(tdId.html());
+      tdName.html("<input type='text' id='txtName' value='"+tdName.html()+"'/>");
+      tdLogin.html("<input type='text' id='txtLogin' value='"+tdLogin.html()+"'/>");
+      tdPassword.html("<input type='text' id='txtPassword' value='"+ "" +"'/>"); // have decided not to display the password
+      tdButtons.html("<span class='btnSave glyphicon glyphicon-floppy-save'></span>&nbsp;&nbsp;&nbsp;<span class='btnUndo glyphicon glyphicon-refresh'></span>");
+
+      $(".btnSave").bind("click", {mode: "Update", oldId: oId}, saveFun);
+      $(".btnUndo").bind("click", {oldId: oId, oldName: oName, oldLogin: oLogin, oldPassword: ""}, undoFun);
+    };
+
+    // function to delete an user
+    // calls the deleteUser API of server
+    function deleteFun() {
+      console.log("function deleteFun()");
+      var parentVar = $(this).parent().parent();
+      var tdLogin = parentVar.children("td:nth-child(3)");
+      console.log(tdLogin.html());
+      console.log(tdLogin);
+      $.post("deleteUser", {
+          login: tdLogin.html()
+        }).done(function(data) {
+          /*
+          if(<%= test%> == true) {
+            document.getElementById("sameLoginMessage").style.visibility = "hidden";
+            document.getElementById("deleteErrorMessage").style.visibility = "hidden";
+            parentVar.remove();
+          } else {
+            document.getElementById("deleteErrorMessage").style.visibility = "visible";
+          }
+          */
+          window.location.reload();
+        });
+
+    };
+
+    // removes the newly added row from the HTML table
+    function cancelFun() {
+      console.log("function cancelFun()");
+      var parentVar = $(this).parent().parent();
+      document.getElementById("sameLoginMessage").style.visibility = "hidden";
+      parentVar.remove();
+    }
+
+    // reverts back the changes done during edit
+    function undoFun(event) {
+      console.log("function undoFun()");
+      var parentVar = $(this).parent().parent();
+      var tdId = parentVar.children("td:nth-child(1)");
+      var tdName = parentVar.children("td:nth-child(2)");
+      var tdLogin = parentVar.children("td:nth-child(3)");
+      var tdPassword = parentVar.children("td:nth-child(4)");
+      var tdButtons = parentVar.children("td:nth-child(5)");
+
+      tdId.html(event.data.oldId);
+      tdName.html(event.data.oldName);
+      tdLogin.html(event.data.oldLogin);
+      tdPassword.html(event.data.oldPassword);
+      tdButtons.html("<span class='btnEdit glyphicon glyphicon-pencil'></span>&nbsp;&nbsp;&nbsp;<span class='btnDelete glyphicon glyphicon-trash'></span>");
+
+      document.getElementById("sameLoginMessage").style.visibility = "hidden";
+
+      $(".btnEdit").bind("click", editFun);
+      $(".btnDelete").bind("click", deleteFun);
+    }
+
+    </script>
+  </body>
+</html>

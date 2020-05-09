@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      .navbar {
+        background-color: #563d7c;
+      }
+      .navbar-default .navbar-nav li a{
+        color: #eee;
+      }
+      .navbar-default .navbar-nav li a:hover{
+        color: white;
+      }
+      th, td{
+        text-align: center;
+      }
+      thead {
+        background-color: #e57373;
+    color: white;
+      }
+
+       p {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 10px;
+          text-decoration: underline;
+          float: right;
+          font-weight: bold;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav">
+              <li><a href="/"><b>Home</b></a></li>
+              <li><a href="/contact"><b>Contact</b></a></li>
+              <li><a href="/addContact"><b>Add Contact</b></a></li>
+              <li><a href="/stock"><b>Stock Page</b></a></li>
+              <li><a href="/admin"><b>Admin</b></a></li>
+              <li><a href="/logout">
+                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                  </a>
+              </li>
+
+          </ul>
+
+              <p id="userName"><%=username%></p>
+
+        </div>
+    </nav>
+    <br><br><br>
+
+      <div class="container">
+
+          <div class="row">
+              <p><br /></p>
+          </div>
+
+          <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-4">
+                  <div class="panel panel-default">
+                      <form name="addContact" method="post" action="/postContact">
+                          <p></p>
+                          <table class="table table-bordered table-hover">
+                              <tbody>
+                                  <tr>
+                                      <td class="col-md-6">Name</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="text" class="form-control" name="contactName" required maxlength="30">
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6">Email</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="email" class="form-control" name="email" required maxlength="30">
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6">Address</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="text" class="form-control" name="address" required maxlength="100">
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6">Phone Number</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="text" class="form-control" name="phoneNumber" required maxlength="30">
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6">Favorite Place</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="text" class="form-control" name="favoritePlace" required maxlength="30">
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6">Enter URL for the Favorite Place</td>
+                                      <td class="col-md-6">
+                                          <div class="form-group">
+                                              <input type="text" class="form-control" name="favoritePlaceURL" required>
+                                          </div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="col-md-6"></td>
+                                      <td class="col-md-6">
+                                          <input type="submit" value="Submit">
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </form>
+                  </div>
+              </div>
+              <div class="col-md-4"></div>
+          </div>
+      </div>
+  </body>
+</html>

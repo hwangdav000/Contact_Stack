@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      .navbar {
+        background-color: #563d7c;
+      }
+      .navbar-default .navbar-nav li a{
+        color: #eee;
+      }
+      .navbar-default .navbar-nav li a:hover{
+        color: white;
+      }
+      th, td{
+        text-align: center;
+      }
+      thead {
+        background-color: #e57373;
+    color: white;
+      }
+
+       p {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 10px;
+          text-decoration: underline;
+          float: right;
+          font-weight: bold;
+      }
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav">
+              <li><a href="/"><b>Home</b></a></li>
+              <li><a href="/contact"><b>Contact</b></a></li>
+              <li><a href="/addContact"><b>Add Contact</b></a></li>
+              <li><a href="/stock"><b>Stock Page</b></a></li>
+              <li><a href="/admin"><b>Admin</b></a></li>
+              <li><a href="/logout">
+                  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                  </a>
+              </li>
+
+          </ul>
+
+              <p id="userName"><%=username%></p>
+
+        </div>
+    </nav>
+      <br><br>
+      <div class="container">
+          <table class="table" id="contactTable">
+              <thead>
+                  <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Phone Number</th>
+                      <th scope="col">Favorite Place</th>
+                  </tr>
+              </thead>
+              <tbody id = "mytbody" >
+                <%for(var i = 0; i < contacts.length; i++) { %>
+                  <tr>
+                    <td> <%= contacts[i].contact_name %> </td>
+                    <td> <%= contacts[i].contact_email %> </td>
+                    <td> <%= contacts[i].contact_address %> </td>
+                    <td> <%= contacts[i].contact_phone %> </td>
+                    <td> <a href = "<%= contacts[i].contact_favoriteplaceurl %>"> <%= contacts[i].contact_favoriteplace %> </a></td>
+                  </tr>
+                <% } %>
+              </tbody>
+          </table>
+      </div>
+      <div id = "test"></div>
+  </body>
+</html>
